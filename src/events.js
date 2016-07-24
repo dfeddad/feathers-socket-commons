@@ -11,10 +11,10 @@ export function filterMixin(service) {
   service.mixin({
     _eventFilters: { all: [] },
 
-    filter(event, callback) {      
+    filter(event, callback) {
       const obj = typeof event === 'string' ? { [event]: callback } : event;
       const filterData = convertFilterData(obj);
-      
+
       debug(`Adding ${filterData.length} filters for event '${event}'`);
 
       each(filterData, (callbacks, event) => {
@@ -53,11 +53,9 @@ export function getDispatcher(service, ev, data, hook) {
             filterFn.call(service, data, connection, hook)
           );
         }
-
-        promise = promise.then(data => data ? data : Promise.reject());
       });
     }
-    
+
     promise.catch(e => debug(`Error in filter chain for '${ev}' event`, e));
 
     return promise;
